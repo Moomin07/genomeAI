@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🧬 Genetic AI Detective</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            padding: 40px;
+            margin: 0;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        button {
+            display: block;
+            margin: 40px auto;
+            padding: 15px 40px;
+            font-size: 18px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        #result {
+            margin-top: 40px;
+            padding: 25px;
+            background: #ecf0f1;
+            border-radius: 15px;
+            display: none;
+        }
+        #result.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧬 Genetic AI Detective</h1>
+
+        <label for="gene">🔬 Normal Gene Name (e.g. HBB, CFTR)</label>
+        <input type="text" id="gene" placeholder="Type gene name...">
+
+        <label for="dna">🧬 Patient's Gene Code (e.g. ATCGGTAACC)</label>
+        <textarea id="dna" rows="4" placeholder="Paste DNA sequence..."></textarea>
+
+        <button onclick="analyzeDNA()">🔍 Analyze with AI</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function analyzeDNA() {
+            const gene = document.getElementById('gene').value.trim();
+            const dna = document.getElementById('dna').value.trim();
+
+            if (!gene || !dna) {
+                alert("Please fill in both fields!");
+                return;
+            }
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = "<p>🧠 AI is thinking... please wait.</p>";
+            resultDiv.classList.add('show');
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ gene, dna })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <h3>🩺 AI Analysis</h3>
+                        <p>${data.answer.replace(/\n/g, '<br>')}</p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<p style="color:red">❌ ${data.error}</p>`;
+                }
+            } catch (err) {
+                resultDiv.innerHTML = "<p style='color:red'>⚠️ Server error. Is Python running?</p>";
+            }
+        }
+    </script>
+</body>
+</html>
