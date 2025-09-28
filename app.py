@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__, static_folder='.')
 
-# 🔑 PASTE YOUR GOOGLE GEMINI API KEY HERE!
+# 🔑 PASTE YOUR GOOGLE GEMINI API KEY HERE! this is moomin api key isko latter change krna hai
 GEMINI_API_KEY = "AIzaSyDLL45UDQjTOJ6X0vgMP5XuVAYn2aF2bew"
 
 # Configure Gemini once
@@ -50,3 +50,4 @@ def analyze():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000, debug=True)
+    #this will run the google api in the back end it is just a learning curve for me i have created this for talib for now and i will use the same for my futre projects maybe
