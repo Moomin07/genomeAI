@@ -9,7 +9,7 @@ GEMINI_API_KEY = "AIzaSyDLL45UDQjTOJ6X0vgMP5XuVAYn2aF2bew"
 
 # Configure Gemini once
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('models/gemini-2.5-flash')
+model = genai.GenerativeModel('models/gemini-2.0-flash-exp')
 
 @app.route('/')
 def index():
@@ -48,6 +48,35 @@ def analyze():
     except Exception as e:
         return jsonify({"error": f"AI Error: {str(e)}"}), 500
 
+@app.route('/disorder-info', methods=['POST'])
+def disorder_info():
+    data = request.get_json()
+    disorder_name = data.get('disorder', '').strip()
+
+    if not disorder_name:
+        return jsonify({"error": "Please enter a disorder name!"}), 400
+
+    try:
+        prompt = f"""
+        You are a medical genetics expert. Please provide comprehensive information about the genetic disorder: {disorder_name}
+
+        Include:
+        1. Overview and description
+        2. Genetic cause (which gene(s) are affected)
+        3. Inheritance pattern
+        4. Common symptoms
+        5. Diagnosis methods
+        6. Treatment options
+        7. Prognosis
+
+        Format the response clearly with sections. Keep it informative but accessible to non-specialists.
+        """
+
+        response = model.generate_content(prompt)
+        return jsonify({"answer": response.text.strip()})
+
+    except Exception as e:
+        return jsonify({"error": f"AI Error: {str(e)}"}), 500
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000, debug=True)
-    #this will run the google api in the back end it is just a learning curve for me i have created this for talib for now and i will use the same for my futre projects maybe
