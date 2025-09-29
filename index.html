@@ -341,10 +341,17 @@
     <div class="dna-helix"></div>
 
     <div class="container">
+<<<<<<< HEAD
         <div class="header">
             <h1>GenoAI</h1>
             <p>Advanced Genetic Analysis Powered by Artificial Intelligence</p>
         </div>
+=======
+        <h1>Genetic AI Detective</h1>
+        <!-- madyfication-->
+        <label for="gene">Normal Gene Name (e.g. HBB, CFTR)</label>
+        <input type="text" id="gene" placeholder="Type gene name...">
+>>>>>>> origin/main
 
         <div class="tab-nav">
             <button class="tab-btn active" onclick="switchTab('sequence')">
@@ -399,6 +406,7 @@
         </div>
     </div>
 
+<<<<<<< HEAD
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loading">
         <div>
@@ -407,3 +415,43 @@
             </div>
             <div class="loading-text">Analyzing with AI...</div>
         </div
+=======
+    <script>
+        async function analyzeDNA() {
+            const gene = document.getElementById('gene').value.trim();
+            const dna = document.getElementById('dna').value.trim();
+
+            if (!gene || !dna) {
+                alert("Please fill in both fields!");
+                return;
+            }
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = "<p>🧠 AI is thinking... please wait.</p>";
+            resultDiv.classList.add('show');
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ gene, dna })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <h3>🩺 AI Analysis</h3>
+                        <p>${data.answer.replace(/\n/g, '<br>')}</p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<p style="color:red">❌ ${data.error}</p>`;
+                }
+            } catch (err) {
+                resultDiv.innerHTML = "<p style='color:red'>⚠️ Server error. Is Python running?</p>";
+            }
+        }
+    </script>
+</body>
+</html>
+>>>>>>> origin/main
