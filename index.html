@@ -341,17 +341,10 @@
     <div class="dna-helix"></div>
 
     <div class="container">
-<<<<<<< HEAD
         <div class="header">
             <h1>GenoAI</h1>
             <p>Advanced Genetic Analysis Powered by Artificial Intelligence</p>
         </div>
-=======
-        <h1>Genetic AI Detective</h1>
-        <!-- madyfication-->
-        <label for="gene">Normal Gene Name (e.g. HBB, CFTR)</label>
-        <input type="text" id="gene" placeholder="Type gene name...">
->>>>>>> origin/main
 
         <div class="tab-nav">
             <button class="tab-btn active" onclick="switchTab('sequence')">
@@ -406,7 +399,6 @@
         </div>
     </div>
 
-<<<<<<< HEAD
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loading">
         <div>
@@ -414,9 +406,61 @@
                 <div class="helix"></div>
             </div>
             <div class="loading-text">Analyzing with AI...</div>
-        </div
-=======
+        </div>
+    </div>
+
     <script>
+        // Tab Switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            // Deactivate all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            // Activate clicked button
+            event.target.classList.add('active');
+        }
+
+        // Show/hide loading overlay
+        function showLoading() {
+            document.getElementById('loading').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.remove('active');
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Display result in target div
+        function displayResult(resultId, content) {
+            const resultDiv = document.getElementById(resultId);
+            resultDiv.innerHTML = `
+                <h3>🩺 AI Analysis Result</h3>
+                <p>${escapeHtml(content).replace(/\n/g, '<br>')}</p>
+            `;
+            resultDiv.classList.add('show');
+        }
+
+        // Display error
+        function displayError(resultId, message) {
+            const resultDiv = document.getElementById(resultId);
+            resultDiv.innerHTML = `<p style="color:#ff6b6b">❌ ${escapeHtml(message)}</p>`;
+            resultDiv.classList.add('show');
+        }
+
+        // Analyze DNA Mutation
         async function analyzeDNA() {
             const gene = document.getElementById('gene').value.trim();
             const dna = document.getElementById('dna').value.trim();
@@ -426,9 +470,10 @@
                 return;
             }
 
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = "<p>🧠 AI is thinking... please wait.</p>";
-            resultDiv.classList.add('show');
+            const resultId = 'sequence-result';
+            document.getElementById(resultId).classList.remove('show');
+
+            showLoading();
 
             try {
                 const response = await fetch('/analyze', {
@@ -438,20 +483,55 @@
                 });
 
                 const data = await response.json();
+                hideLoading();
 
                 if (response.ok) {
-                    resultDiv.innerHTML = `
-                        <h3>🩺 AI Analysis</h3>
-                        <p>${data.answer.replace(/\n/g, '<br>')}</p>
-                    `;
+                    displayResult(resultId, data.answer);
                 } else {
-                    resultDiv.innerHTML = `<p style="color:red">❌ ${data.error}</p>`;
+                    displayError(resultId, data.error || "Unknown error occurred.");
                 }
             } catch (err) {
-                resultDiv.innerHTML = "<p style='color:red'>⚠️ Server error. Is Python running?</p>";
+                hideLoading();
+                displayError(resultId, "⚠️ Network error. Is the server running?");
+                console.error("Fetch error:", err);
+            }
+        }
+
+        // Get Disorder Info
+        async function getDisorderInfo() {
+            const disorder = document.getElementById('disorder').value.trim();
+
+            if (!disorder) {
+                alert("Please enter a disorder name!");
+                return;
+            }
+
+            const resultId = 'disorder-result';
+            document.getElementById(resultId).classList.remove('show');
+
+            showLoading();
+
+            try {
+                const response = await fetch('/disorder-info', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ disorder })
+                });
+
+                const data = await response.json();
+                hideLoading();
+
+                if (response.ok) {
+                    displayResult(resultId, data.answer);
+                } else {
+                    displayError(resultId, data.error || "Unknown error occurred.");
+                }
+            } catch (err) {
+                hideLoading();
+                displayError(resultId, "⚠️ Network error. Is the server running?");
+                console.error("Fetch error:", err);
             }
         }
     </script>
 </body>
 </html>
->>>>>>> origin/main
