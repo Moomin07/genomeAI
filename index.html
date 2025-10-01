@@ -89,10 +89,11 @@
         .tab-btn {
             padding: 12px 30px;
             background: rgba(255, 255, 255, 0.1);
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
             border: 2px solid transparent;
             border-radius: 30px;
             color: #ffffff;
-            font-size: 1rem;
+            font-size: 1.5rem;
             cursor: pointer;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
@@ -124,10 +125,13 @@
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 40px;
-            margin-bottom: 30px;
+            margin-bottom: 80px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .card:hover {
@@ -264,32 +268,63 @@
             text-align: center;
         }
 
-        /* Results */
-        .result-box {
-            margin-top: 30px;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            display: none;
-            animation: fadeInUp 0.5s ease;
-        }
+/* Results Box - Fixed Overflow */
+.result-box {
+    margin-top: 30px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: none;
+    animation: fadeInUp 0.5s ease;
 
-        .result-box.show {
-            display: block;
-        }
+    /* 👇 NEW: Contain overflow with scroll */
+    max-width: 100%;
+    max-height: 400px;          /* Adjust as needed */
+    overflow-y: auto;            /* Enable vertical scroll */
+    overscroll-behavior: contain; /* Prevent page scroll while scrolling inside */
 
-        .result-box h3 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
+    /* Smooth scroll styling */
+    scrollbar-width: thin;       /* Firefox */
+    scrollbar-color: #667eea rgba(255,255,255,0.1);
+}
 
-        .result-box p {
-            line-height: 1.8;
-            color: #e0e0e0;
-            margin-bottom: 15px;
-        }
+/* WebKit browsers (Chrome, Safari, Edge) */
+.result-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+.result-box::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.result-box::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 4px;
+}
+
+.result-box::-webkit-scrollbar-thumb:hover {
+    background: #5a67d8;
+}
+
+.result-box.show {
+    display: block;
+}
+
+.result-box h3 {
+    color: #667eea;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.result-box p {
+    line-height: 1.8;
+    color: #e0e0e0;
+    margin-bottom: 15px;
+    word-wrap: break-word;       /* Break long words */
+    white-space: pre-line;       /* Preserve line breaks from JS */
+}
 
         /* Animations */
         @keyframes fadeIn {
@@ -380,6 +415,39 @@
         display: none; /* Hide pipe before hidden item */
     }
 }
+/* Glitch-Free Select Box */
+.form-select {
+    display: block;
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: #ffffff;
+    background: transparent; /* ← IMPORTANT: Remove custom background to avoid glitch */
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    appearance: auto; /* Let browser handle dropdown natively */
+    cursor: pointer;
+}
+
+.form-select:hover,
+.form-select:focus {
+    outline: none;
+    border-color: #667eea;
+    background: rgba(255, 255, 255, 0.08); /* Very subtle background on focus — safe */
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+/* Optional: Style placeholder text */
+.form-select:invalid {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.form-select option {
+    background: #0a0e27;
+    color: #ffffff;
+}
     </style>
 </head>
 <body>
@@ -394,10 +462,13 @@
 
         <div class="tab-nav">
             <button class="tab-btn active" onclick="switchTab('sequence')">
-                🧬 Sequence Analysis
+                Sequence Analysis
             </button>
             <button class="tab-btn" onclick="switchTab('disorder')">
-                🔬 Disorder Information
+                Disorder Information
+            </button>
+            <button class="tab-btn" onclick="switchTab('library')">
+                Disease Library
             </button>
         </div>
 
@@ -444,7 +515,39 @@
             </div>
         </div>
     </div>
+    <!-- Disease Library Tab -->
+<div id="library-tab" class="tab-content">
+    <div class="card">
+        <h2 style="margin-bottom: 30px;">📚 Genetic Disease Library</h2>
 
+        <div class="form-group">
+            <label for="disease-picker">Select a Disease to Learn More</label>
+            <select id="disease-picker" class="form-select">
+                <option value="">-- Select a Genetic Disease --</option>
+                <option value="disease1">disease1</option>
+                <option value="disease2">disease2</option>
+                <option value="disease3">disease3</option>
+                <option value="disease4">disease4</option>
+                <option value="disease5">disease5</option>
+                <option value="disease6">disease6</option>
+                <option value="disease7">disease7</option>
+                <option value="disease8">disease8</option>
+                <option value="disease9">test</option>
+                <option value="disease10">disease10</option>
+                <option value="disease11">disease11</option>
+                <option value="disease12">disease12</option>
+                <option value="disease13">disease13</option>
+                <option value="disease14">disease14</option>
+                <option value="disease15">disease15</option>
+            </select>
+        </div>
+
+        <div id="disease-info" class="result-box" style="display: none;">
+            <h3 id="disease-title">Disease Name</h3>
+            <p id="disease-desc">Description will appear here when you select a disease.</p>
+        </div>
+    </div>
+</div>
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loading">
         <div>
@@ -461,7 +564,7 @@
     <a href="https://www.instagram.com/madyfication/" target="_blank">MOOMIN</a>
     <span>|</span>
  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=moomin4325@gmail.com&su=GenoAI%20Inquiry&body=Hello,%0A%0AI%20have%20a%20question%20about..." target="_blank" rel="noopener">
-    📧 Contact via Gmail
+    📧 moomindar4325@gmail.com</a>
 </a>
     <span>|</span>
  <a href="https://api.whatsapp.com/send/?phone=916006788242&text=Hi+Moomin%2C+I+have+a+question+about+GenoAI%21&type=phone_number&app_absent=0" target="_blank" rel="noopener">📱 WhatsApp</a>
@@ -500,6 +603,13 @@
             div.textContent = text;
             return div.innerHTML;
         }
+
+        function nl2p(text) {
+    return text
+        .split('\n\n')                     // Split on double newline = paragraph break
+        .map(p => `<p>${sanitizeHTML(p)}</p>`) // Escape & wrap each in <p>
+        .join('');
+}
 
         // Display result in target div
         function displayResult(resultId, content) {
@@ -590,6 +700,99 @@
                 console.error("Fetch error:", err);
             }
         }
+        // Local Disease Database
+const diseaseDatabase = {
+    disease1: {
+        name: "disease1",
+        description: "description here for disease1."
+    },
+    disease2: {
+        name: "disease2",
+        description: "description here for Disease2."
+    },
+    disease3: {
+        name: "disease3",
+        description: "description here for disease3."
+    },
+    disease4: {
+        name: "disease4",
+        description: "description here for disease4."
+    },
+    disease5: {
+        name: "disease5",
+        description: "description here for disease5."
+    },
+    disease6: {
+        name: "disease6",
+        description: "description here for disease6."
+    },
+    disease7: {
+        name: "disease7",
+        description: "description here for disease7."
+    },
+    disease8: {
+        name: "disease8",
+        description: "description here for disease8."
+    },
+    disease9: {
+        name: "Test disease",
+        description: `
+Cystic fibrosis is a genetic disorder that affects mostly the lungs, but also the pancreas, liver, and intestine.
+
+It is caused by mutations in the CFTR gene, which encodes a protein that regulates the movement of salt and water in and out of cells.
+
+Symptoms include persistent coughing, frequent lung infections, and poor growth.
+
+this is a test subject i am writing ato check my html.
+
+this is to check the paragraph distances.
+  this is writen to check the paragraph spaces.
+    `.trim()
+    },
+    disease10: {
+        name: "disease10",
+        description: "description here for disease10."
+    },
+    disease11: {
+        name: "disease11",
+        description: "description here for disease11."
+    },
+    disease12: {
+        name: "disease12",
+        description: "description here for disease12."
+    },
+    disease13: {
+        name: "disease13",
+        description: "description here for disease13."
+    },
+    disease14: {
+        name: "disease14",
+        description: "description here for disease14."
+    },
+    disease15: {
+        name: "disease15",
+        description: "description here for disease15."
+    }
+};
+
+// Handle selection change
+document.getElementById('disease-picker').addEventListener('change', function() {
+    const value = this.value;
+    const infoBox = document.getElementById('disease-info');
+    const titleEl = document.getElementById('disease-title');
+    const descEl = document.getElementById('disease-desc');
+
+    if (value && diseaseDatabase[value]) {
+        const disease = diseaseDatabase[value];
+        titleEl.textContent = disease.name;
+        descEl.textContent = disease.description;
+        infoBox.style.display = 'block';
+        infoBox.classList.add('show');
+    } else {
+        infoBox.style.display = 'none';
+        infoBox.classList.remove('show');
+    }
+});
     </script>
 </body>
 </html>
