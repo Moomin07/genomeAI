@@ -35,11 +35,13 @@ def analyze():
         Patient's DNA Sequence: {dna_code}
 
         Please explain:
-        1. What genetic disease this might indicate.
-        2. How this sequence differs from normal.
-        3. What treatments or management options exist.
+        1. first check if the normal gene is actually a gene, if it is not a gene and anything else than a gene name display error message "this gene doesn't exist".
+        2. What genetic disease this might indicate.
+        3. How this sequence differs from normal.
+        4. What treatments or management options exist.
+        5. if the pateint's DNA sequence does't match to the noraml gene or a disease related to the normal gene display an error message"this DNA sequence doesn't match our database".
 
-        Keep it simple, clear, and under 300 words.
+        Keep it simple, clear, to the point no extra information and under 300 words.
         """
 
         response = model.generate_content(prompt)
@@ -69,7 +71,7 @@ def disorder_info():
         6. Treatment options
         7. Prognosis
 
-        Format the response clearly with sections. Keep it informative but accessible to non-specialists.
+        Format the response clearly with sections. Keep it informative but accessible to non-specialists, if the disorder isn't an actual known disorder or is anything else than a genetic disorder display error message "DISORDER DOESN'T EXIST".
         """
 
         response = model.generate_content(prompt)
